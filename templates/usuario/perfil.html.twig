@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}Perfil de Usuario{% endblock %}
+
+
+{% block body %}
+<div class="card" style="max-width:500px;margin:auto;">
+<h2>Mi Perfil</h2>
+<p><strong>Nombre:</strong> {{ usuario.nombre }} {{ usuario.apellido }}</p>
+<p><strong>Email:</strong> {{ usuario.email }}</p>
+<p><strong>Estado:</strong> {{ usuario.estado }}</p>
+<p><strong>Tipo:</strong> {{ usuario.tipo }}</p>
+</div>
+{% endblock %}

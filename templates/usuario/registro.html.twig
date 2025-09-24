@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}Registro de Usuario{% endblock %}
+
+
+{% block body %}
+<div class="card" style="max-width:500px;margin:auto;">
+<h2 style="text-align:center;">Registrarse</h2>
+
+
+{{ form_start(form) }}
+<div style="margin-bottom:10px;">
+{{ form_label(form.nombre) }}
+{{ form_widget(form.nombre, { 'attr': {'class': 'form-control', 'style': 'width:100%;padding:8px;'} }) }}
+{{ form_errors(form.nombre) }}
+</div>
+
+
+<div style="margin-bottom:10px;">
+{{ form_label(form.apellido) }}
+{{ form_widget(form.apellido, { 'attr': {'class': 'form-control', 'style': 'width:100%;padding:8px;'} }) }}
+{{ form_errors(form.apellido) }}
+</div>
+
+
+<div style="margin-bottom:10px;">
+{{ form_label(form.email) }}
+{{ form_widget(form.email, { 'attr': {'class': 'form-control', 'style': 'width:100%;padding:8px;'} }) }}
+{{ form_errors(form.email) }}
+</div>
+
+
+<div style="margin-bottom:10px;">
+{{ form_label(form.password) }}
+{{ form_widget(form.password, { 'attr': {'class': 'form-control', 'style': 'width:100%;padding:8px;'} }) }}
+{{ form_errors(form.password) }}
+</div>
+
+
+<button type="submit" class="btn btn-green" style="width:100%;">Registrarme</button>
+{{ form_end(form) }}
+
+
+<p style="margin-top:15px;text-align:center;">
+¿Ya tenés cuenta? <a href="{{ path('app_login') }}">Iniciá sesión</a>
+</p>
+</div>
+{% endblock %}

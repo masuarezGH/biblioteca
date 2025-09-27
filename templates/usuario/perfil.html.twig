@@ -9,7 +9,14 @@
 <h2>Mi Perfil</h2>
 <p><strong>Nombre:</strong> {{ usuario.nombre }} {{ usuario.apellido }}</p>
 <p><strong>Email:</strong> {{ usuario.email }}</p>
-<p><strong>Estado:</strong> {{ usuario.estado }}</p>
+<p>
+  Estado: 
+  {% if usuario.estado %}
+      ✅ Verificado
+  {% else %}
+      ⏳ Pendiente de verificación por un administrador
+  {% endif %}
+</p>
 <p><strong>Tipo:</strong> {{ usuario.tipo }}</p>
 </div>
 {% endblock %}

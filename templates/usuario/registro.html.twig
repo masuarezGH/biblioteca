@@ -12,29 +12,36 @@
 {{ form_start(form) }}
 <div style="margin-bottom:10px;">
 {{ form_label(form.nombre) }}
-{{ form_widget(form.nombre, { 'attr': {'class': 'form-control', 'style': 'width:100%;padding:8px;'} }) }}
+{{ form_widget(form.nombre, { 'attr': {'class': 'form-control', 'style': 'width:95%;padding:8px;'} }) }}
 {{ form_errors(form.nombre) }}
 </div>
 
 
 <div style="margin-bottom:10px;">
 {{ form_label(form.apellido) }}
-{{ form_widget(form.apellido, { 'attr': {'class': 'form-control', 'style': 'width:100%;padding:8px;'} }) }}
+{{ form_widget(form.apellido, { 'attr': {'class': 'form-control', 'style': 'width:95%;padding:8px;'} }) }}
 {{ form_errors(form.apellido) }}
 </div>
 
 
 <div style="margin-bottom:10px;">
 {{ form_label(form.email) }}
-{{ form_widget(form.email, { 'attr': {'class': 'form-control', 'style': 'width:100%;padding:8px;'} }) }}
+{{ form_widget(form.email, { 'attr': {'class': 'form-control', 'style': 'width:95%;padding:8px;'} }) }}
 {{ form_errors(form.email) }}
 </div>
 
 
 <div style="margin-bottom:10px;">
 {{ form_label(form.password) }}
-{{ form_widget(form.password, { 'attr': {'class': 'form-control', 'style': 'width:100%;padding:8px;'} }) }}
+{{ form_widget(form.password, { 'attr': {'class': 'form-control', 'style': 'width:95%;padding:8px;'} }) }}
 {{ form_errors(form.password) }}
+</div>
+
+
+<div style="margin-bottom:10px;">
+{{ form_label(form.username) }}
+{{ form_widget(form.username, { 'attr': {'class': 'form-control', 'style': 'width:95%;padding:8px;'} }) }}
+{{ form_errors(form.username) }}
 </div>
 
 

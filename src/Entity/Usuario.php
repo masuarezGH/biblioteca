@@ -5,9 +5,11 @@ namespace App\Entity;
 use App\Repository\UsuarioRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UsuarioRepository::class)]
-class Usuario
+class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -23,17 +25,20 @@ class Usuario
     #[ORM\Column(length: 50)]
     private ?string $username = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 50, unique: true)]
     private ?string $email = null;
 
-    #[ORM\Column(type: Types::ARRAY)]
-    private array $rol = [];
+    #[ORM\Column(type: Types::JSON)]
+    private array $rol = [];   // 👈 mejor usar JSON para compatibilidad con Symfony
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 255)]
     private ?string $password = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 50, nullable: true)]
     private ?string $tipo = null;
+
+     #[ORM\Column(type: 'boolean')]
+    private bool $estado = false; // false = no verificado, true = verificado
 
     public function getId(): ?int
     {
@@ -48,7 +53,6 @@ class Usuario
     public function setNombre(string $nombre): static
     {
         $this->nombre = $nombre;
-
         return $this;
     }
 
@@ -60,7 +64,6 @@ class Usuario
     public function setApellido(string $apellido): static
     {
         $this->apellido = $apellido;
-
         return $this;
     }
 
@@ -72,7 +75,6 @@ class Usuario
     public function setUsername(string $username): static
     {
         $this->username = $username;
-
         return $this;
     }
 
@@ -84,19 +86,29 @@ class Usuario
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
-    public function getRol(): array
+    /**
+     * Métodos requeridos por Symfony
+     */
+    public function getUserIdentifier(): string
     {
-        return $this->rol;
+        // Symfony usará el email como identificador único
+        return (string) $this->email;
+    }
+
+    public function getRoles(): array
+    {
+        $roles = $this->rol;
+        // Todo usuario tiene al menos ROLE_USER
+        $roles[] = 'ROLE_USER';
+        return array_unique($roles);
     }
 
     public function setRol(array $rol): static
     {
         $this->rol = $rol;
-
         return $this;
     }
 
@@ -108,8 +120,12 @@ class Usuario
     public function setPassword(string $password): static
     {
         $this->password = $password;
-
         return $this;
+    }
+
+    public function eraseCredentials(): void
+    {
+        // Si tenés datos sensibles temporales, limpiarlos aquí
     }
 
     public function getTipo(): ?string
@@ -120,7 +136,17 @@ class Usuario
     public function setTipo(string $tipo): static
     {
         $this->tipo = $tipo;
+        return $this;
+    }
 
+    public function isEstado(): bool
+    {
+        return $this->estado;
+    }
+
+    public function setEstado(bool $estado): self
+    {
+        $this->estado = $estado;
         return $this;
     }
 }

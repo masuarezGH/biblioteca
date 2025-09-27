@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administrar Usuarios{% endblock %}
+
+{% block body %}
+<div class="card" style="max-width:800px;margin:auto;">
+    <h2 style="text-align:center;">Administración de Usuarios</h2>
+
+    {% for message in app.flashes('success') %}
+        <div style="color:green; font-weight:bold;">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('info') %}
+        <div style="color:blue; font-weight:bold;">{{ message }}</div>
+    {% endfor %}
+
+    <table border="1" cellpadding="8" cellspacing="0" style="width:100%; margin-top:20px;">
+        <thead>
+            <tr style="background:#ddd;">
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for usuario in usuarios %}
+            <tr>
+                <td>{{ usuario.id }}</td>
+                <td>{{ usuario.nombre }} {{ usuario.apellido }}</td>
+                <td>{{ usuario.email }}</td>
+                <td>
+                    {% if usuario.estado %}
+                        ✅ Verificado
+                    {% else %}
+                        ⏳ Pendiente
+                    {% endif %}
+                </td>
+                <td>
+                    {% if not usuario.estado %}
+                        <a href="{{ path('admin_usuarios_verificar', {id: usuario.id}) }}" style="color:green;">✔ Verificar</a>
+                    {% else %}
+                        <a href="{{ path('admin_usuarios_rechazar', {id: usuario.id}) }}" style="color:red;">✖ Rechazar</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

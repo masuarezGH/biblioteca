@@ -5,7 +5,9 @@
 
 
 {% block body %}
-<h1>Panel de Administración</h1>
+    <h1>Bienvenido al Panel de Administración</h1>
+        <p>Hola <strong>{{ user.username }}</strong> 👑</p>
+
 <div style="display:flex;gap:20px;flex-wrap:wrap;">
 <a href="#" class="btn btn-dark">Validar Usuarios</a>
 <a href="#" class="btn btn-dark">Validar Reservas</a>
@@ -13,4 +15,11 @@
 <a href="#" class="btn btn-dark">Libros sin devolver</a>
 <a href="#" class="btn btn-dark">Clientes deudores</a>
 </div>
+<ul>
+        <li><a href="{{ path('app_logout') }}">Cerrar sesión</a></li>
+        <li><a href="{{ path('app_login') }}">Ir al login</a></li>
+    </ul>
 {% endblock %}
+
+
+

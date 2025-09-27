@@ -19,13 +19,13 @@
 <form action="{{ path('app_login') }}" method="post">
 <div style="margin-bottom:10px;">
 <label for="username">Email</label><br>
-<input type="text" id="username" name="_username" value="{{ last_username }}" required autofocus style="width:100%;padding:8px;">
+<input type="text" id="username" name="_username" value="{{ last_username }}" required autofocus style="width:95%;padding:8px;">
 </div>
 
 
 <div style="margin-bottom:10px;">
 <label for="password">Contraseña</label><br>
-<input type="password" id="password" name="_password" required style="width:100%;padding:8px;">
+<input type="password" id="password" name="_password" required style="width:95%;padding:8px;">
 </div>
 
 
@@ -34,7 +34,8 @@
 
 
 <p style="margin-top:15px;text-align:center;">
-¿No tenés cuenta? <a href="{{ path('usuario_registro') }}">Registrate aquí</a>
+¿No tenés cuenta? <a href="{{ path( 'usuario_registro' ) }}">Registrate aquí</a>
+
 </p>
 </div>
 {% endblock %}

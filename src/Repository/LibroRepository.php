@@ -1,6 +1,7 @@
 <?php
 namespace App\Repository;
 
+use App\Enum\EstadoLibro;
 use App\Entity\Libro;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -16,13 +17,22 @@ class LibroRepository extends ServiceEntityRepository
      * @return Libro[]
      */
     public function findDisponibles(): array
-    {
-        return $this->createQueryBuilder('l')
-            ->andWhere('l.estado = :estado')
-            ->setParameter('estado', 'disponible')
-            ->getQuery()
-            ->getResult();
-    }
+{
+    return $this->createQueryBuilder('l')
+        ->andWhere('l.estado = :estado')
+        ->setParameter('estado', EstadoLibro::DISPONIBLE)
+        ->getQuery()
+        ->getResult();
+}
+
+    public function findPrestados(): array
+{
+    return $this->createQueryBuilder('l')
+        ->andWhere('l.estado = :estado')
+        ->setParameter('estado', EstadoLibro::PRESTADO)
+        ->getQuery()
+        ->getResult();
+}
 
     /**
      * Buscar libros por género

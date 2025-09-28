@@ -1,32 +1,40 @@
-
 {% extends 'base.html.twig' %}
 
-
-{% block title %}Detalle del Libro{% endblock %}
-
+{% block title %}{{ libro.titulo }}{% endblock %}
 
 {% block body %}
-<div class="card" style="max-width:600px;margin:auto;text-align:center;">
-<img src="{{ asset(libro.imagen) }}" alt="{{ libro.titulo }}" style="max-width:100%;height:300px;object-fit:cover;border-radius:5px;">
-<h2>{{ libro.titulo }}</h2>
-<p><strong>Autor:</strong> {{ libro.autor }}</p>
-<p><strong>Género:</strong> {{ libro.genero }}</p>
-<p>{{ libro.descripcion }}</p>
-<p><strong>Estado:</strong> {{ libro.estado }}</p>
+<div class="container" style="max-width: 800px; margin: auto; padding: 20px;">
+    <a href="{{ path('libro_catalogo') }}" style="display:inline-block; margin-bottom:15px; text-decoration:none; color:#007bff;">⬅ Volver al catálogo</a>
 
+    <div style="display: flex; gap: 20px; flex-wrap: wrap; border:1px solid #ddd; border-radius:10px; padding:20px; background:white; box-shadow:0 2px 5px rgba(0,0,0,0.1);">
+        
+        <div style="flex:1; min-width:250px;">
+            <img src="/uploads/libros/{{ libro.imagen }}" alt="{{ libro.titulo }}" style="width:100%; border-radius:8px; object-fit:cover;">
+        </div>
 
-{% if app.user %}
-<form action="#" method="post" style="margin-top:15px;">
-<input type="hidden" name="idLibro" value="{{ libro.id }}">
-<button type="submit" class="btn btn-green">Reservar</button>
-</form>
-{% else %}
-<p><a href="{{ path('app_login') }}">Iniciá sesión</a> para reservar este libro.</p>
-{% endif %}
+        <div style="flex:2; min-width:300px;">
+            <h2 style="margin-top:0;">{{ libro.titulo }}</h2>
+            <p><strong>Autor:</strong> {{ libro.autor }}</p>
+            <p><strong>Género:</strong> {{ libro.genero }}</p>
+            
+            <p><strong>Estado:</strong>
+                {% if libro.estado.value == 'Disponible' %}
+                    <span style="color:green;">✔ Disponible</span>
+                {% else %}
+                    <span style="color:red;">✘ Prestado</span>
+                {% endif %}
+            </p>
+            <hr>
+            <p style="font-size:15px; line-height:1.6;">{{ libro.descripcion }}</p>
 
-
-<div style="margin-top:20px;">
-<a href="{{ path('libro_listar') }}" class="btn btn-dark">← Volver al listado</a>
-</div>
+            <div style="margin-top:20px;">
+                {% if libro.estado.value == 'Disponible' %}
+                    <a href="{{ path('reserva_libro', {id: libro.id}) }}" class="btn btn-success">Reservar</a>
+                {% else %}
+                    <button class="btn btn-secondary" disabled>No disponible</button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

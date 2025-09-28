@@ -1,7 +1,7 @@
 <header style="background:#111;color:#fff;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;">
 <div style="font-weight:bold;">📚 Biblioteca Online</div>
 <nav>
-<a href="{{ path('libro_listar') }}" style="color:#fff;margin-right:10px;">Inicio</a>
+<a href="{{ path('libro_catalogo') }}" style="color:#fff;margin-right:10px;">Inicio</a>
 {% if app.user %}
 <a href="{{ path('usuario_perfil', {id: app.user.id}) }}" style="color:#fff;margin-right:10px;">Mi perfil</a>
 <a href="{{ path('app_logout') }}" class="btn btn-red">Salir</a>

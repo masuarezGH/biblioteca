@@ -44,7 +44,7 @@ class UsuarioController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        return $this->render('registro.html.twig', [
+        return $this->render('usuario/registro.html.twig', [
             'form' => $form->createView(),
         ]);
     }

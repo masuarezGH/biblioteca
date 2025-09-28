@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Enum\EstadoLibro;
+use Doctrine\DBAL\Types\Types;
 use App\Repository\LibroRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -13,23 +15,23 @@ class Libro
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 100)]
     private ?string $titulo = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 100)]
     private ?string $autor = null;
 
     #[ORM\Column(length: 50)]
     private ?string $genero = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $descripcion = null;
 
     #[ORM\Column(length: 255)]
     private ?string $imagen = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $estado = null;
+    #[ORM\Column(enumType: EstadoLibro::class)]
+    private EstadoLibro $estado = EstadoLibro::DISPONIBLE;
 
     public function getId(): ?int
     {
@@ -96,15 +98,14 @@ class Libro
         return $this;
     }
 
-    public function getEstado(): ?string
+    public function getEstado(): EstadoLibro
     {
         return $this->estado;
     }
 
-    public function setEstado(string $estado): static
+    public function setEstado(EstadoLibro $estado): static
     {
         $this->estado = $estado;
-
         return $this;
     }
 }

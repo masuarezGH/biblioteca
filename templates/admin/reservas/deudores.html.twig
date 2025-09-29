@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Clientes Deudores{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h2>⚠️ Clientes Deudores</h2>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Socio</th>
+                <th>Libro</th>
+                <th>Fecha Fin</th>
+                <th>Días de atraso</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for reserva in reservas %}
+            <tr>
+                <td>{{ reserva.socio.nombre }} {{ reserva.socio.apellido }}</td>
+                <td>{{ reserva.libro.titulo }}</td>
+                <td>{{ reserva.fechaFin|date('d/m/Y') }}</td>
+                <td>{{ (date().diff(reserva.fechaFin)).days }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4" class="text-center">No hay clientes deudores.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

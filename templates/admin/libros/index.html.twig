@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestión de Libros{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h2>📚 Libros</h2>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Autor</th>
+                <th>Género</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for libro in libros %}
+            <tr>
+                <td>{{ libro.titulo }}</td>
+                <td>{{ libro.autor }}</td>
+                <td>{{ libro.genero }}</td>
+                <td>{{ libro.estado.value }}</td>
+                <td>
+                    <a href="#" class="btn btn-sm btn-info">Editar</a>
+                    <a href="#" class="btn btn-sm btn-danger">Eliminar</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5" class="text-center">No hay libros cargados.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

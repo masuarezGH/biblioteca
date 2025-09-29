@@ -1,56 +1,53 @@
 {% extends 'base.html.twig' %}
 
-
 {% block title %}Registro de Usuario{% endblock %}
 
-
 {% block body %}
-<div class="card" style="max-width:500px;margin:auto;">
-<h2 style="text-align:center;">Registrarse</h2>
+<div class="container mt-5" style="max-width: 500px;">
+    <div class="card shadow-sm p-4">
+        <h2 class="text-center mb-4">📝 Registrarse</h2>
+
+        {{ form_start(form) }}
+            {{ form_errors(form) }}
+
+            <div class="mb-3">
+                {{ form_label(form.nombre, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.nombre, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.nombre) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.apellido, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.apellido, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.apellido) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.username, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.username, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.username) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.email, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.email) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.password, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.password, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.password) }}
+            </div>
 
 
-{{ form_start(form) }}
-<div style="margin-bottom:10px;">
-{{ form_label(form.nombre) }}
-{{ form_widget(form.nombre, { 'attr': {'class': 'form-control', 'style': 'width:95%;padding:8px;'} }) }}
-{{ form_errors(form.nombre) }}
-</div>
 
+            <button type="submit" class="btn btn-success w-100">Registrarme</button>
+        {{ form_end(form) }}
 
-<div style="margin-bottom:10px;">
-{{ form_label(form.apellido) }}
-{{ form_widget(form.apellido, { 'attr': {'class': 'form-control', 'style': 'width:95%;padding:8px;'} }) }}
-{{ form_errors(form.apellido) }}
-</div>
-
-
-<div style="margin-bottom:10px;">
-{{ form_label(form.email) }}
-{{ form_widget(form.email, { 'attr': {'class': 'form-control', 'style': 'width:95%;padding:8px;'} }) }}
-{{ form_errors(form.email) }}
-</div>
-
-
-<div style="margin-bottom:10px;">
-{{ form_label(form.password) }}
-{{ form_widget(form.password, { 'attr': {'class': 'form-control', 'style': 'width:95%;padding:8px;'} }) }}
-{{ form_errors(form.password) }}
-</div>
-
-
-<div style="margin-bottom:10px;">
-{{ form_label(form.username) }}
-{{ form_widget(form.username, { 'attr': {'class': 'form-control', 'style': 'width:95%;padding:8px;'} }) }}
-{{ form_errors(form.username) }}
-</div>
-
-
-<button type="submit" class="btn btn-green" style="width:100%;">Registrarme</button>
-{{ form_end(form) }}
-
-
-<p style="margin-top:15px;text-align:center;">
-¿Ya tenés cuenta? <a href="{{ path('app_login') }}">Iniciá sesión</a>
-</p>
+        <p class="text-center mt-3">
+            ¿Ya tenés cuenta? <a href="{{ path('app_login') }}">Iniciá sesión</a>
+        </p>
+    </div>
 </div>
 {% endblock %}

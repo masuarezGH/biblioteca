@@ -3,19 +3,19 @@
 {% block title %}Administrar Usuarios{% endblock %}
 
 {% block body %}
-<div class="card" style="max-width:800px;margin:auto;">
-    <h2 style="text-align:center;">Administración de Usuarios</h2>
+<div class="container mt-4">
+    <h2 class="text-center mb-3">👥 Administración de Usuarios</h2>
 
     {% for message in app.flashes('success') %}
-        <div style="color:green; font-weight:bold;">{{ message }}</div>
+        <div class="alert alert-success">{{ message }}</div>
     {% endfor %}
     {% for message in app.flashes('info') %}
-        <div style="color:blue; font-weight:bold;">{{ message }}</div>
+        <div class="alert alert-info">{{ message }}</div>
     {% endfor %}
 
-    <table border="1" cellpadding="8" cellspacing="0" style="width:100%; margin-top:20px;">
-        <thead>
-            <tr style="background:#ddd;">
+    <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+            <tr>
                 <th>ID</th>
                 <th>Nombre</th>
                 <th>Email</th>
@@ -31,18 +31,22 @@
                 <td>{{ usuario.email }}</td>
                 <td>
                     {% if usuario.estado %}
-                        ✅ Verificado
+                        <span class="badge bg-success">Verificado</span>
                     {% else %}
-                        ⏳ Pendiente
+                        <span class="badge bg-warning text-dark">Pendiente</span>
                     {% endif %}
                 </td>
                 <td>
                     {% if not usuario.estado %}
-                        <a href="{{ path('admin_usuarios_verificar', {id: usuario.id}) }}" style="color:green;">✔ Verificar</a>
+                        <a href="{{ path('admin_usuarios_verificar', {id: usuario.id}) }}" class="btn btn-success btn-sm">✔ Verificar</a>
                     {% else %}
-                        <a href="{{ path('admin_usuarios_rechazar', {id: usuario.id}) }}" style="color:red;">✖ Rechazar</a>
+                        <a href="{{ path('admin_usuarios_rechazar', {id: usuario.id}) }}" class="btn btn-danger btn-sm">✖ Rechazar</a>
                     {% endif %}
                 </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5" class="text-center">No hay usuarios registrados.</td>
             </tr>
         {% endfor %}
         </tbody>

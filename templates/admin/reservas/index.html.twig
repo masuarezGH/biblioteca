@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reservas pendientes{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h2>📌 Reservas pendientes</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Libro</th>
+                <th>Socio</th>
+                <th>Fecha inicio</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reserva in reservas %}
+                <tr>
+                    <td>{{ reserva.libro.titulo }}</td>
+                    <td>{{ reserva.socio.nombre }} {{ reserva.socio.apellido }}</td>
+                    <td>{{ reserva.fechaInicio|date('d/m/Y') }}</td>
+                    <td>
+                        <a href="{{ path('admin_reserva_aprobar', {id: reserva.id}) }}" class="btn btn-success btn-sm">Aprobar</a>
+                        <a href="{{ path('admin_reserva_rechazar', {id: reserva.id}) }}" class="btn btn-danger btn-sm">Rechazar</a>
+                    </td>
+                </tr>
+            {% else %}
+                {% include 'components/_table_empty.html.twig' with { colspan: 4, message: 'No hay reservas pendientes.' } %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

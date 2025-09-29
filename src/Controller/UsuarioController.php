@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Reserva;
 use App\Entity\Usuario;
 use App\Form\UsuarioType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,39 +14,21 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UsuarioController extends AbstractController
 {
-    #[Route('/registro', name: 'usuario_registro')]
-    public function registro(
-        Request $request,
-        EntityManagerInterface $em,
-        UserPasswordHasherInterface $passwordHasher
-    ): Response {
-        $usuario = new Usuario();
-        $form = $this->createForm(UsuarioType::class, $usuario);
-        $form->handleRequest($request);
+    #[Route('/perfil', name: 'usuario_perfil')]
+    public function perfil(EntityManagerInterface $em)
+    {
+        $usuario = $this->getUser();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Encriptar contraseña
-            $hashedPassword = $passwordHasher->hashPassword(
-                $usuario,
-                $usuario->getPassword()
-            );
-            $usuario->setPassword($hashedPassword);
+        // Traer reservas activas del usuario
+        $reservas = $em->getRepository(Reserva::class)->findBy([
+            'socio' => $usuario,
+            'estado' => 'Activa'
+        ]);
 
-            // Asignar valores por defecto
-            $usuario->setRol(['ROLE_USER']); // rol normal
-            $usuario->setEstado(false);      // pendiente de verificación
-            $usuario->setTipo('socio');      // tipo socio
-
-            $em->persist($usuario);
-            $em->flush();
-
-            $this->addFlash('success', 'Tu cuenta fue creada como socio. Espera la validación de un administrador.');
-
-            return $this->redirectToRoute('app_login');
-        }
-
-        return $this->render('usuario/registro.html.twig', [
-            'form' => $form->createView(),
+        return $this->render('usuario/perfil.html.twig', [
+            'usuario' => $usuario,
+            'reservas' => $reservas,
         ]);
     }
+
 }

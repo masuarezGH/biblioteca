@@ -1,41 +1,35 @@
 {% extends 'base.html.twig' %}
 
-
 {% block title %}Iniciar Sesión{% endblock %}
 
-
 {% block body %}
-<div class="card" style="max-width:400px;margin:auto;">
-<h2 style="text-align:center;">Iniciar Sesión</h2>
+<div class="container mt-5" style="max-width: 400px;">
+    <div class="card shadow-sm p-4">
+        <h2 class="text-center mb-4">🔐 Iniciar Sesión</h2>
 
+        {% if error %}
+            <div class="alert alert-danger">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
 
-{% if error %}
-<div style="color:#c00;font-weight:bold;margin-bottom:10px;">
-{{ error.messageKey|trans(error.messageData, 'security') }}
-</div>
-{% endif %}
+        <form action="{{ path('app_login') }}" method="post">
+            <div class="mb-3">
+                <label for="username" class="form-label">Email</label>
+                <input type="text" id="username" name="_username" value="{{ last_username }}" required autofocus class="form-control">
+            </div>
 
+            <div class="mb-3">
+                <label for="password" class="form-label">Contraseña</label>
+                <input type="password" id="password" name="_password" required class="form-control">
+            </div>
 
-<form action="{{ path('app_login') }}" method="post">
-<div style="margin-bottom:10px;">
-<label for="username">Email</label><br>
-<input type="text" id="username" name="_username" value="{{ last_username }}" required autofocus style="width:95%;padding:8px;">
-</div>
+            <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+        </form>
 
-
-<div style="margin-bottom:10px;">
-<label for="password">Contraseña</label><br>
-<input type="password" id="password" name="_password" required style="width:95%;padding:8px;">
-</div>
-
-
-<button type="submit" class="btn btn-dark" style="width:100%;">Ingresar</button>
-</form>
-
-
-<p style="margin-top:15px;text-align:center;">
-¿No tenés cuenta? <a href="{{ path( 'usuario_registro' ) }}">Registrate aquí</a>
-
-</p>
+        <p class="text-center mt-3">
+            ¿No tenés cuenta? <a href="{{ path('usuario_registro') }}">Registrate aquí</a>
+        </p>
+    </div>
 </div>
 {% endblock %}

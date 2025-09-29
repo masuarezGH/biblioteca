@@ -10,7 +10,7 @@
 <p><strong>Nombre:</strong> {{ usuario.nombre }} {{ usuario.apellido }}</p>
 <p><strong>Email:</strong> {{ usuario.email }}</p>
 <p>
-  Estado: 
+  <strong>Estado: </strong>
   {% if usuario.estado %}
       ✅ Verificado
   {% else %}
@@ -19,4 +19,20 @@
 </p>
 <p><strong>Tipo:</strong> {{ usuario.tipo }}</p>
 </div>
+<h3>Mis reservas activas</h3>
+
+{% if reservas is empty %}
+    <p>No tenés reservas activas.</p>
+{% else %}
+    <ul>
+        {% for reserva in reservas %}
+            <li>
+                <strong>{{ reserva.libro.titulo }}</strong>  
+                (desde {{ reserva.fechaInicio|date('d/m/Y') }} hasta {{ reserva.fechaFin|date('d/m/Y') }})
+                - Estado: {{ reserva.estado }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
 {% endblock %}
+

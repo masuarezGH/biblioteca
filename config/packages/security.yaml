@@ -36,7 +36,8 @@ security:
         - { path: ^/registro, roles: PUBLIC_ACCESS }
         - { path: ^/catalogo, roles: PUBLIC_ACCESS }
         - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/reservas, roles: ROLE_USER }
+        - { path: ^/reserva, roles: ROLE_USER }
+        - { path: ^/reserva/devolver, roles: ROLE_USER }
         - { path: ^/, roles: ROLE_USER }
 
         

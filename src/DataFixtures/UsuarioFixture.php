@@ -7,7 +7,6 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-
 class UsuarioFixture extends Fixture
 {
     private UserPasswordHasherInterface $passwordHasher;
@@ -30,6 +29,7 @@ class UsuarioFixture extends Fixture
         );
         $usuario->setRol(['ROLE_USER']);
         $usuario->setTipo('usuario');
+        $usuario->setEstado(true); // validado
         $manager->persist($usuario);
 
         // 👤 Otro usuario
@@ -43,6 +43,7 @@ class UsuarioFixture extends Fixture
         );
         $usuario2->setRol(['ROLE_USER']);
         $usuario2->setTipo('usuario');
+        $usuario2->setEstado(false); // no validado
         $manager->persist($usuario2);
 
         // 👑 Admin
@@ -56,9 +57,33 @@ class UsuarioFixture extends Fixture
         );
         $admin->setRol(['ROLE_ADMIN']);
         $admin->setTipo('admin');
+        $admin->setEstado(true);
         $manager->persist($admin);
 
-        // Guardar en la base de datos
+        // ➕ Más usuarios
+        for ($i = 1; $i <= 5; $i++) {
+            $u = new Usuario();
+            $u->setNombre("Usuario$i");
+            $u->setApellido("Apellido$i");
+            $u->setUsername("user$i");
+            $u->setEmail("user$i@example.com");
+            $u->setPassword(
+                $this->passwordHasher->hashPassword($u, 'password123')
+            );
+            $u->setRol(['ROLE_USER']);
+            $u->setTipo('usuario');
+            $u->setEstado($i % 2 === 0); // algunos validados, otros no
+            $manager->persist($u);
+
+            // Guardamos referencia para usar en ReservaFixture
+            $this->addReference("usuario_$i", $u);
+        }
+
+        $this->addReference('usuario_admin', $admin);
+        $this->addReference('usuario_juan', $usuario);
+        $this->addReference('usuario_ana', $usuario2);
+
         $manager->flush();
     }
 }
+    

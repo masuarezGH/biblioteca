@@ -74,6 +74,17 @@
                 </div>
             </div>
         </div>
+
+        <!-- Libros Publicados -->
+        <div class="col-md-3">
+            <div class="card text-bg-info shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Libros Publicados</h5>
+                    <p class="display-6">{{ libros_publicados|length }}</p>
+                    <a href="{{ path('admin_libros') }}" class="btn btn-light btn-sm">Ver</a>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Últimas reservas -->

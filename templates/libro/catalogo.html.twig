@@ -11,6 +11,9 @@
         <input type="text" name="titulo" placeholder="Buscar por título" value="{{ app.request.get('titulo') }}"
                style="flex:2; padding:8px; border:1px solid #ccc; border-radius:5px;">
 
+        <input type="text" name="autor" placeholder="Buscar por autor" value="{{ app.request.get('autor') }}"
+               style="flex:2; padding:8px; border:1px solid #ccc; border-radius:5px;">
+
         <select name="genero" style="flex:1; padding:8px; border:1px solid #ccc; border-radius:5px;">
             <option value="">Todos los géneros</option>
             {% for g in generos %}

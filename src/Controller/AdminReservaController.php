@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use APP\Entity\Libro;
 use App\Entity\Reserva;
 use App\Enum\EstadoLibro;
 use Doctrine\ORM\EntityManagerInterface;
@@ -37,6 +38,9 @@ class AdminReservaController extends AbstractController
     public function rechazar(Reserva $reserva, EntityManagerInterface $em): Response
     {
         $reserva->setEstado('Rechazada');
+        $reserva->setFechaFin(new \DateTime()); //marcar la fecha de fin como hoy
+        $libro = $reserva->getLibro();
+        $libro->setEstado(EstadoLibro::DISPONIBLE);
         $em->flush();
 
         $this->addFlash('info', 'Reserva rechazada.');

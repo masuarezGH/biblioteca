@@ -1,38 +1,65 @@
 {% extends 'base.html.twig' %}
 
-
 {% block title %}Perfil de Usuario{% endblock %}
 
-
 {% block body %}
-<div class="card" style="max-width:500px;margin:auto;">
-<h2>Mi Perfil</h2>
-<p><strong>Nombre:</strong> {{ usuario.nombre }} {{ usuario.apellido }}</p>
-<p><strong>Email:</strong> {{ usuario.email }}</p>
-<p>
-  <strong>Estado: </strong>
-  {% if usuario.estado %}
-      ✅ Verificado
-  {% else %}
-      ⏳ Pendiente de verificación por un administrador
-  {% endif %}
-</p>
-<p><strong>Tipo:</strong> {{ usuario.tipo }}</p>
+<div class="container mt-5" style="max-width: 800px;">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-person-circle me-2 fs-3"></i>
+                <h4 class="mb-0">Mi Perfil</h4>
+            </div>
+            <a href="{{ path('usuario_perfil_editar') }}" class="btn btn-light btn-sm">
+                ✏️ Editar Perfil
+            </a>
+        </div>
+
+        <div class="card-body p-4">
+            <div class="row align-items-center">
+                <div class="col-md-3 text-center mb-3 mb-md-0">
+                    <i class="bi bi-person-circle text-secondary" style="font-size: 5rem;"></i>
+                </div>
+                <div class="col-md-9">
+                    <p><strong>👤 Nombre:</strong> {{ usuario.nombre }} {{ usuario.apellido }}</p>
+                    <p><strong>📧 Email:</strong> {{ usuario.email }}</p>
+                    <p>
+                        <strong>🔑 Estado:</strong>
+                        {% if usuario.estado %}
+                            <span class="badge bg-success">Verificado</span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark">Pendiente de verificación</span>
+                        {% endif %}
+                    </p>
+                    <p><strong>🎫 Tipo:</strong> {{ usuario.tipo|capitalize }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0 mt-4">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">📚 Mis reservas activas</h5>
+        </div>
+        <div class="card-body">
+            {% if reservas is empty %}
+                <p class="text-muted">No tenés reservas activas.</p>
+            {% else %}
+                <ul class="list-group list-group-flush">
+                    {% for reserva in reservas %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>{{ reserva.libro.titulo }}</strong><br>
+                                <small class="text-muted">
+                                    {{ reserva.fechaInicio|date('d/m/Y') }} → {{ reserva.fechaFin|date('d/m/Y') }}
+                                </small>
+                            </div>
+                            <span class="badge bg-info">{{ reserva.estado }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
 </div>
-<h3>Mis reservas activas</h3>
-
-{% if reservas is empty %}
-    <p>No tenés reservas activas.</p>
-{% else %}
-    <ul>
-        {% for reserva in reservas %}
-            <li>
-                <strong>{{ reserva.libro.titulo }}</strong>  
-                (desde {{ reserva.fechaInicio|date('d/m/Y') }} hasta {{ reserva.fechaFin|date('d/m/Y') }})
-                - Estado: {{ reserva.estado }}
-            </li>
-        {% endfor %}
-    </ul>
-{% endif %}
 {% endblock %}
-

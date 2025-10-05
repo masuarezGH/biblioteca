@@ -31,4 +31,33 @@ class UsuarioController extends AbstractController
         ]);
     }
 
+    #[Route('/perfil/editar', name: 'usuario_perfil_editar')]
+    public function editarPerfil(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
+    {
+        $usuario = $this->getUser();
+        $form = $this->createForm(UsuarioType::class, $usuario);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Hashear la nueva contraseña si se ha cambiado
+            if ($form->get('password')->getData()) {
+                $hashedPassword = $passwordHasher->hashPassword(
+                    $usuario,
+                    $form->get('password')->getData()
+                );
+                $usuario->setPassword($hashedPassword);
+            }
+
+            $em->persist($usuario);
+            $em->flush();
+
+            $this->addFlash('success', 'Perfil actualizado con éxito.');
+            return $this->redirectToRoute('usuario_perfil');
+        }
+
+        return $this->render('usuario/editar_perfil.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
 }

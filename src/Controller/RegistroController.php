@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Reserva;
 use App\Entity\Usuario;
-use App\Form\UsuarioType;
+use App\Form\RegistroType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,21 +21,20 @@ class RegistroController extends AbstractController
         UserPasswordHasherInterface $passwordHasher
     ): Response {
         $usuario = new Usuario();
-        $form = $this->createForm(UsuarioType::class, $usuario);
+        $form = $this->createForm(RegistroType::class, $usuario);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Encriptar contraseña
             $hashedPassword = $passwordHasher->hashPassword(
                 $usuario,
-                $usuario->getPassword()
+                $form->get('password')->getData()
             );
             $usuario->setPassword($hashedPassword);
 
-            // Valores por defecto
-            $usuario->setRol(['ROLE_USER']); // rol normal
-            $usuario->setEstado(false);      // pendiente de verificación
-            $usuario->setTipo('socio');      // tipo socio
+            // valores por defecto
+            $usuario->setRol(['ROLE_USER']);
+            $usuario->setEstado(false);
+            $usuario->setTipo('socio');
 
             $em->persist($usuario);
             $em->flush();
@@ -44,6 +43,7 @@ class RegistroController extends AbstractController
 
             return $this->redirectToRoute('app_login');
         }
+
 
         return $this->render('usuario/registro.html.twig', [
             'form' => $form->createView(),

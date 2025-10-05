@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Editar Perfil{% endblock %}
+
+{% block body %}
+<div class="container mt-5" style="max-width: 700px;">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-primary text-white d-flex align-items-center">
+            <i class="bi bi-person-circle me-2 fs-3"></i>
+            <h4 class="mb-0">Editar Perfil</h4>
+        </div>
+
+        <div class="card-body p-4">
+            {# Mensajes flash #}
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+            {{ form_start(form) }}
+
+            <div class="mb-3">
+                {{ form_label(form.username, 'Nombre de usuario', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(form.username, {'attr': {'class': 'form-control'}}) }}
+                <div class="form-text">Este será tu identificador único en el sistema.</div>
+                {{ form_errors(form.username) }}
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form_label(form.nombre, 'Nombre', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                    {{ form_widget(form.nombre, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.nombre) }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form_label(form.apellido, 'Apellido', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                    {{ form_widget(form.apellido, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.apellido) }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.email, 'Correo electrónico', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.email) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.password, 'Nueva contraseña (opcional)', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(form.password, {'attr': {'class': 'form-control'}}) }}
+                <div class="form-text">Deja este campo vacío si no deseas cambiar tu contraseña.</div>
+                {{ form_errors(form.password) }}
+            </div>
+
+
+            <div class="d-flex justify-content-between mt-4">
+                <a href="{{ path('usuario_perfil') }}" class="btn btn-outline-secondary">
+                    ⬅ Cancelar
+                </a>
+                <button type="submit" class="btn btn-success">
+                    💾 Guardar cambios
+                </button>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

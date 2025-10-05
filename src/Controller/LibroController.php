@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-
 use App\Entity\Libro;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,6 +14,7 @@ class LibroController extends AbstractController
     #[Route('/', name: 'homepage')]
     public function home(): Response
     {
+        // Redirige al catálogo como vista inicial
         return $this->redirectToRoute('libro_catalogo');
     }
 
@@ -23,6 +23,7 @@ class LibroController extends AbstractController
     {
         $titulo = $request->query->get('titulo');
         $genero = $request->query->get('genero');
+        $autor = $request->query->get('autor');
 
         $qb = $em->getRepository(Libro::class)->createQueryBuilder('l');
 
@@ -35,15 +36,19 @@ class LibroController extends AbstractController
             $qb->andWhere('l.genero = :genero')
                ->setParameter('genero', $genero);
         }
+        if ($autor) {
+            $qb->andWhere('l.autor LIKE :autor')
+                ->setParameter('autor', '%' . $autor . '%');
+        }
 
         $libros = $qb->getQuery()->getResult();
 
         // Extraer todos los géneros para el select
         $generos = $em->getRepository(Libro::class)
                       ->createQueryBuilder('l')
-                      ->select('DISTINCT l.genero')
+                      ->select('DISTINCT l.genero AS genero')
                       ->getQuery()
-                      ->getResult();
+                      ->getScalarResult();
 
         return $this->render('libro/catalogo.html.twig', [
             'libros' => $libros,
@@ -64,5 +69,4 @@ class LibroController extends AbstractController
             'libro' => $libro,
         ]);
     }
-
 }

@@ -44,7 +44,7 @@ class ReservaController extends AbstractController
         $em->persist($libro);
         $em->flush();
 
-        $this->addFlash('success', 'Reserva realizada con éxito.');
+        $this->addFlash('success', 'Reserva realizada con éxito. Esperando confirmación del administrador.');
         return $this->redirectToRoute('libro_detalle', ['id' => $libro->getId()]);
     }
 

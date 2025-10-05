@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Libro;
 use App\Entity\Usuario;
 use App\Entity\Reserva;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,6 +19,7 @@ class AdminController extends AbstractController
         $reservasPendientes = $em->getRepository(Reserva::class)->findBy(['estado' => 'Pendiente']);
         $reservasActivas = $em->getRepository(Reserva::class)->findBy(['estado' => 'Activa']);
         $reservasRechazadas = $em->getRepository(Reserva::class)->findBy(['estado' => 'Rechazada']);
+        $librosPublicados = $em->getRepository(Libro::class)->findAll([]);
 
         $hoy = new \DateTime();
         $librosSinDevolver = $em->getRepository(Reserva::class)->createQueryBuilder('r')
@@ -40,6 +42,7 @@ class AdminController extends AbstractController
             'libros_sin_devolver' => $librosSinDevolver,
             'clientes_deudores' => $clientesDeudores,
             'ultimas_reservas' => $ultimasReservas,
+            'libros_publicados' => $librosPublicados,
         ]);
 }
 

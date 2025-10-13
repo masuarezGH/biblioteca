@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Reserva;
 use App\Entity\Libro;
 use App\Enum\EstadoLibro;
+use App\Enum\EstadoReserva;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,6 +22,7 @@ class ReservaController extends AbstractController
             $this->addFlash('error', 'El libro ya está prestado.');
             return $this->redirectToRoute('libro_detalle', ['id' => $libro->getId()]);
         }
+
         $usuario = $this->getUser();
 
         if (!$usuario->isEstado()) {
@@ -30,11 +32,11 @@ class ReservaController extends AbstractController
 
         // Crear la reserva
         $reserva = new Reserva();
-        $reserva->setSocio($this->getUser()); // usa setSocio, no setUsuario
+        $reserva->setSocio($usuario); // usa setSocio, no setUsuario
         $reserva->setLibro($libro);
         $reserva->setFechaInicio(new \DateTime());
         $reserva->setFechaFin((new \DateTime())->modify('+7 days'));
-        $reserva->setEstado('Pendiente');
+        $reserva->setEstado(EstadoReserva::PENDIENTE);
 
         // Cambiar estado del libro
         $libro->setEstado(EstadoLibro::PRESTADO);
@@ -53,7 +55,7 @@ class ReservaController extends AbstractController
     public function devolver(Reserva $reserva, EntityManagerInterface $em)
     {
         // Cambiar estado de la reserva
-        $reserva->setEstado('Finalizada');
+        $reserva->setEstado(EstadoReserva::FINALIZADA);
         $reserva->setFechaFin(new \DateTime());
 
         // Cambiar estado del libro

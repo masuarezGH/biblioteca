@@ -11,7 +11,7 @@
 <div class="card">
 <p><strong>Libro:</strong> {{ reserva.libro.titulo }}</p>
 <p><strong>Fecha inicio:</strong> {{ reserva.fechaInicio|date('d/m/Y') }}</p>
-<p><strong>Estado:</strong> {{ reserva.estado }}</p>
+<p><strong>Estado:</strong> {{ reserva.estado.value }}</p>
 </div>
 {% else %}
 <p>No tenés reservas registradas.</p>

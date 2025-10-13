@@ -36,7 +36,7 @@
             <div class="card text-bg-primary shadow-sm">
                 <div class="card-body text-center">
                     <h5 class="card-title">Reservas activas</h5>
-                    <p class="display-6">{{ reservas_activas|length }}</p>
+                    <p class="display-6">{{ reservas_activas|filter(r => r.estado.value == 'Activa')|length }}</p>
                     <a href="{{ path('admin_reservas_activas') }}" class="btn btn-light btn-sm">Ver</a>
                 </div>
             </div>
@@ -106,13 +106,13 @@
                         <td>{{ reserva.socio.nombre }} {{ reserva.socio.apellido }}</td>
                         <td>{{ reserva.fechaInicio|date('d/m/Y') }}</td>
                         <td>
-                            {% if reserva.estado == 'Pendiente' %}
+                            {% if reserva.estado.value == 'Pendiente' %}
                                 <span class="badge bg-secondary">Pendiente</span>
-                            {% elseif reserva.estado == 'Activa' %}
+                            {% elseif reserva.estado.value == 'Activa' %}
                                 <span class="badge bg-primary">Activa</span>
-                            {% elseif reserva.estado == 'Rechazada' %}
+                            {% elseif reserva.estado.value == 'Rechazada' %}
                                 <span class="badge bg-danger">Rechazada</span>
-                            {% elseif reserva.estado == 'Finalizada' %}
+                            {% elseif reserva.estado.value == 'Finalizada' %}
                                 <span class="badge bg-success">Finalizada</span>
                             {% endif %}
                         </td>
@@ -122,6 +122,29 @@
                 {% endfor %}
             </tbody>
         </table>
+
+        {# 👇 Paginación colocada debajo de la tabla #}
+        <nav aria-label="Paginación de reservas">
+            <ul class="pagination justify-content-center">
+                {% if currentPage > 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ path('admin_dashboard', {page: currentPage - 1}) }}">Anterior</a>
+                    </li>
+                {% endif %}
+
+                {% for i in 1..totalPages %}
+                    <li class="page-item {% if i == currentPage %}active{% endif %}">
+                        <a class="page-link" href="{{ path('admin_dashboard', {page: i}) }}">{{ i }}</a>
+                    </li>
+                {% endfor %}
+
+                {% if currentPage < totalPages %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ path('admin_dashboard', {page: currentPage + 1}) }}">Siguiente</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
     </div>
 </div>
 {% endblock %}

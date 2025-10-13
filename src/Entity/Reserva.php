@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\EstadoReserva;
 use App\Repository\ReservaRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -9,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: ReservaRepository::class)]
 class Reserva
 {
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -20,8 +22,8 @@ class Reserva
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $fechaFin = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $estado = null;
+    #[ORM\Column(enumType: EstadoReserva::class)]
+    private EstadoReserva $estado;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
@@ -60,15 +62,14 @@ class Reserva
         return $this;
     }
 
-    public function getEstado(): ?string
+    public function getEstado(): EstadoReserva
     {
         return $this->estado;
     }
 
-    public function setEstado(string $estado): static
+    public function setEstado(EstadoReserva $estado): self
     {
         $this->estado = $estado;
-
         return $this;
     }
 

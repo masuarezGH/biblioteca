@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Reserva;
 use App\Entity\Usuario;
 use App\Form\UsuarioType;
+use App\Repository\ReservaRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,20 +15,22 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UsuarioController extends AbstractController
 {
-    #[Route('/perfil', name: 'usuario_perfil')]
-    public function perfil(EntityManagerInterface $em)
+    #[Route('/mi-perfil', name: 'mi_perfil')]
+    public function miPerfil(ReservaRepository $reservaRepo): Response
     {
         $usuario = $this->getUser();
 
-        // Traer reservas activas del usuario
-        $reservas = $em->getRepository(Reserva::class)->findBy([
-            'socio' => $usuario,
-            'estado' => 'Activa'
-        ]);
+        if (!$usuario) {
+            throw $this->createNotFoundException('Usuario no encontrado');
+        }
+
+        $reservasActivas = $reservaRepo->findReservasActivasPorUsuario($usuario);
+        $historial = $reservaRepo->findHistorialPorUsuario($usuario);
 
         return $this->render('usuario/perfil.html.twig', [
             'usuario' => $usuario,
-            'reservas' => $reservas,
+            'reservas_activas' => $reservasActivas,
+            'historial' => $historial,
         ]);
     }
 
@@ -52,7 +55,7 @@ class UsuarioController extends AbstractController
             $em->flush();
 
             $this->addFlash('success', 'Perfil actualizado con éxito.');
-            return $this->redirectToRoute('usuario_perfil');
+            return $this->redirectToRoute('mi_perfil');
         }
 
         return $this->render('usuario/editar_perfil.html.twig', [

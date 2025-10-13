@@ -2,9 +2,10 @@
 
 namespace App\Controller;
 
-use APP\Entity\Libro;
+use App\Entity\Libro;
 use App\Entity\Reserva;
 use App\Enum\EstadoLibro;
+use App\Enum\EstadoReserva;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,14 +20,17 @@ class AdminReservaController extends AbstractController
     public function index(EntityManagerInterface $em): Response
     {
         // Ahora el index muestra SOLO las pendientes
-        $reservas = $em->getRepository(Reserva::class)->findBy(['estado' => 'Pendiente']);
+        $reservas = $em->getRepository(Reserva::class)->findBy([
+            'estado' => EstadoReserva::PENDIENTE
+        ]);
+
         return $this->render('admin/reservas/index.html.twig', ['reservas' => $reservas]);
     }
 
     #[Route('/aprobar/{id}', name: 'admin_reserva_aprobar')]
     public function aprobar(Reserva $reserva, EntityManagerInterface $em): Response
     {
-        $reserva->setEstado('Activa');
+        $reserva->setEstado(EstadoReserva::ACTIVA);
         $reserva->getLibro()->setEstado(EstadoLibro::PRESTADO);
         $em->flush();
 
@@ -37,10 +41,9 @@ class AdminReservaController extends AbstractController
     #[Route('/rechazar/{id}', name: 'admin_reserva_rechazar')]
     public function rechazar(Reserva $reserva, EntityManagerInterface $em): Response
     {
-        $reserva->setEstado('Rechazada');
-        $reserva->setFechaFin(new \DateTime()); //marcar la fecha de fin como hoy
-        $libro = $reserva->getLibro();
-        $libro->setEstado(EstadoLibro::DISPONIBLE);
+        $reserva->setEstado(EstadoReserva::RECHAZADA);
+        $reserva->setFechaFin(new \DateTime()); // marcar la fecha de fin como hoy
+        $reserva->getLibro()->setEstado(EstadoLibro::DISPONIBLE);
         $em->flush();
 
         $this->addFlash('info', 'Reserva rechazada.');
@@ -50,7 +53,10 @@ class AdminReservaController extends AbstractController
     #[Route('/rechazadas', name: 'admin_reservas_rechazadas')]
     public function rechazadas(EntityManagerInterface $em): Response
     {
-        $reservas = $em->getRepository(Reserva::class)->findBy(['estado' => 'Rechazada']);
+        $reservas = $em->getRepository(Reserva::class)->findBy([
+            'estado' => EstadoReserva::RECHAZADA
+        ]);
+
         return $this->render('admin/reservas/rechazadas.html.twig', ['reservas' => $reservas]);
     }
 
@@ -61,7 +67,7 @@ class AdminReservaController extends AbstractController
         $qb = $em->getRepository(Reserva::class)->createQueryBuilder('r')
             ->where('r.estado = :estado')
             ->andWhere('r.fechaFin >= :hoy')
-            ->setParameter('estado', 'Activa')
+            ->setParameter('estado', EstadoReserva::ACTIVA->value)
             ->setParameter('hoy', $hoy);
 
         $reservas = $qb->getQuery()->getResult();
@@ -76,7 +82,7 @@ class AdminReservaController extends AbstractController
         $qb = $em->getRepository(Reserva::class)->createQueryBuilder('r')
             ->where('r.estado = :estado')
             ->andWhere('r.fechaFin < :hoy')
-            ->setParameter('estado', 'Activa')
+            ->setParameter('estado', EstadoReserva::ACTIVA->value)
             ->setParameter('hoy', $hoy);
 
         $reservas = $qb->getQuery()->getResult();
@@ -91,7 +97,7 @@ class AdminReservaController extends AbstractController
         $qb = $em->getRepository(Reserva::class)->createQueryBuilder('r')
             ->where('r.estado = :estado')
             ->andWhere('r.fechaFin < :hoy')
-            ->setParameter('estado', 'Activa')
+            ->setParameter('estado', EstadoReserva::ACTIVA->value)
             ->setParameter('hoy', $hoy);
 
         $reservasVencidas = $qb->getQuery()->getResult();
@@ -99,5 +105,17 @@ class AdminReservaController extends AbstractController
         return $this->render('admin/reservas/deudores.html.twig', [
             'reservas' => $reservasVencidas
         ]);
+    }
+
+    #[Route('/finalizar/{id}', name: 'admin_reserva_finalizar')]
+    public function finalizar(Reserva $reserva, EntityManagerInterface $em): Response
+    {
+        $reserva->setEstado(EstadoReserva::FINALIZADA);
+        $reserva->setFechaFin(new \DateTime()); // marcar la fecha de fin como hoy
+        $reserva->getLibro()->setEstado(EstadoLibro::DISPONIBLE);
+        $em->flush();
+
+        $this->addFlash('info', 'Reserva finalizada.');
+        return $this->redirectToRoute('admin_reservas_activas');
     }
 }

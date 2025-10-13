@@ -8,11 +8,19 @@
         <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center">
                 <i class="bi bi-person-circle me-2 fs-3"></i>
-                <h4 class="mb-0">Mi Perfil</h4>
+                <h4 class="mb-0">
+                    {% if app.user.id == usuario.id %}
+                        Mi Perfil
+                    {% else %}
+                        Perfil de {{ usuario.nombre }} {{ usuario.apellido }}
+                    {% endif %}
+                </h4>
             </div>
-            <a href="{{ path('usuario_perfil_editar') }}" class="btn btn-light btn-sm">
-                ✏️ Editar Perfil
-            </a>
+            {% if app.user.id == usuario.id %}
+                <a href="{{ path('usuario_perfil_editar') }}" class="btn btn-light btn-sm">
+                    ✏️ Editar Perfil
+                </a>
+            {% endif %}
         </div>
 
         <div class="card-body p-4">
@@ -37,16 +45,17 @@
         </div>
     </div>
 
+    <!-- Reservas activas -->
     <div class="card shadow-sm border-0 mt-4">
         <div class="card-header bg-light">
-            <h5 class="mb-0">📚 Mis reservas activas</h5>
+            <h5 class="mb-0">📚 Reservas activas</h5>
         </div>
         <div class="card-body">
-            {% if reservas is empty %}
-                <p class="text-muted">No tenés reservas activas.</p>
+            {% if reservas_activas is empty %}
+                <p class="text-muted">No tiene reservas activas.</p>
             {% else %}
                 <ul class="list-group list-group-flush">
-                    {% for reserva in reservas %}
+                    {% for reserva in reservas_activas %}
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <div>
                                 <strong>{{ reserva.libro.titulo }}</strong><br>
@@ -54,10 +63,53 @@
                                     {{ reserva.fechaInicio|date('d/m/Y') }} → {{ reserva.fechaFin|date('d/m/Y') }}
                                 </small>
                             </div>
-                            <span class="badge bg-info">{{ reserva.estado }}</span>
+                            <span class="badge bg-info">{{ reserva.estado.value }}</span>
                         </li>
                     {% endfor %}
                 </ul>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Historial de reservas -->
+    <div class="card shadow-sm border-0 mt-4">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">📖 Historial de reservas</h5>
+        </div>
+        <div class="card-body">
+            {% if historial is empty %}
+                <p class="text-muted">No hay historial de reservas.</p>
+            {% else %}
+                <table class="table table-striped align-middle">
+                    <thead>
+                        <tr>
+                            <th>Libro</th>
+                            <th>Inicio</th>
+                            <th>Fin</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reserva in historial %}
+                            <tr>
+                                <td>{{ reserva.libro.titulo }}</td>
+                                <td>{{ reserva.fechaInicio|date('d/m/Y') }}</td>
+                                <td>{{ reserva.fechaFin|date('d/m/Y') }}</td>
+                                <td>
+                                    {% if reserva.estado.value == 'Activa' %}
+                                        <span class="badge bg-info">Activa</span>
+                                    {% elseif reserva.estado.value == 'Pendiente' %}
+                                        <span class="badge bg-warning text-dark">Pendiente</span>
+                                    {% elseif reserva.estado.value == 'Rechazada' %}
+                                        <span class="badge bg-danger">Rechazada</span>
+                                    {% elseif reserva.estado.value == 'Finalizada' %}
+                                        <span class="badge bg-secondary">Finalizada</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             {% endif %}
         </div>
     </div>

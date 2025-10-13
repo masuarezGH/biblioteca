@@ -3,7 +3,7 @@
 <a href="{{ path('libro_catalogo') }}" style="font-weight:bold;">📚 Biblioteca Online</a>
 <a href="{{ path('libro_catalogo') }}" style="color:#fff;margin-right:10px;">Inicio</a>
 {% if app.user %}
-<a href="{{ path('usuario_perfil', {id: app.user.id}) }}" style="color:#fff;margin-right:10px;">Mi perfil</a>
+<a href="{{ path('mi_perfil') }}" style="color:#fff;margin-right:10px;">Mi perfil</a>
 <a href="{{ path('app_logout') }}" class="btn btn-red">Salir</a>
 {% else %}
 <a href="{{ path('app_login') }}" style="color:#fff;margin-right:10px;">Iniciar sesión</a>

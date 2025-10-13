@@ -18,7 +18,11 @@
         <tbody>
         {% for reserva in reservas %}
             <tr>
-                <td>{{ reserva.socio.nombre }} {{ reserva.socio.apellido }}</td>
+                <td>
+                    <a href="{{ path('usuario_perfil', {id: reserva.socio.id}) }}" class="fw-bold text-decoration-none">
+                        {{ reserva.socio.nombre }} {{ reserva.socio.apellido }}
+                    </a>
+                </td>
                 <td>{{ reserva.libro.titulo }}</td>
                 <td>{{ reserva.fechaFin|date('d/m/Y') }}</td>
                 <td>{{ (date().diff(reserva.fechaFin)).days }}</td>

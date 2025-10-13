@@ -20,7 +20,7 @@
                     <td>{{ reserva.libro.titulo }}</td>
                     <td>{{ reserva.socio.nombre }} {{ reserva.socio.apellido }}</td>
                     <td>{{ reserva.fechaInicio|date('d/m/Y') }}</td>
-                    <td>{{ reserva.updatedAt is defined ? reserva.updatedAt|date('d/m/Y H:i') : '-' }}</td>
+                    <td>{{ reserva.fechaFin|date('d/m/Y') }}</td>
                 </tr>
             {% else %}
                 {% include 'components/_table_empty.html.twig' with { colspan: 4, message: 'No hay reservas rechazadas.' } %}

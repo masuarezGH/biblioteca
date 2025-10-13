@@ -12,19 +12,33 @@
                 <th>Socio</th>
                 <th>Fecha inicio</th>
                 <th>Fecha fin</th>
+                <th>Acciones</th> {# 👈 nueva columna #}
             </tr>
         </thead>
         <tbody>
+            {% set hayActivas = false %}
             {% for reserva in reservas %}
-                <tr>
-                    <td>{{ reserva.libro.titulo }}</td>
-                    <td>{{ reserva.socio.nombre }} {{ reserva.socio.apellido }}</td>
-                    <td>{{ reserva.fechaInicio|date('d/m/Y') }}</td>
-                    <td>{{ reserva.fechaFin|date('d/m/Y') }}</td>
-                </tr>
-            {% else %}
-                {% include 'components/_table_empty.html.twig' with { colspan: 4, message: 'No hay reservas activas.' } %}
+                {% if reserva.estado.value == 'Activa' %}
+                    {% set hayActivas = true %}
+                    <tr>
+                        <td>{{ reserva.libro.titulo }}</td>
+                        <td>{{ reserva.socio.nombre }} {{ reserva.socio.apellido }}</td>
+                        <td>{{ reserva.fechaInicio|date('d/m/Y') }}</td>
+                        <td>{{ reserva.fechaFin|date('d/m/Y') }}</td>
+                        <td>
+                            <a href="{{ path('admin_reserva_finalizar', {id: reserva.id}) }}"
+                               class="btn btn-sm btn-danger"
+                               onclick="return confirm('¿Seguro que quieres finalizar esta reserva?');">
+                                Finalizar
+                            </a>
+                        </td>
+                    </tr>
+                {% endif %}
             {% endfor %}
+
+            {% if not hayActivas %}
+                {% include 'components/_table_empty.html.twig' with { colspan: 5, message: 'No hay reservas activas.' } %}
+            {% endif %}
         </tbody>
     </table>
 </div>

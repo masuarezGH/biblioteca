@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Enum\EstadoLibro;
 use App\Entity\Libro;
+use App\Form\LibroType;
+use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -54,5 +56,36 @@ class AdminLibroController extends AbstractController
         return $this->redirectToRoute('admin_libro_editar', ['id' => $libro->getId()]);
     }
 
-    // Podrías agregar aquí métodos para crear y editar libros
+    #[Route('/admin/libros/nuevo', name: 'admin_libro_nuevo')]
+    public function nuevo(Request $request, EntityManagerInterface $em): Response
+    {
+        $libro = new Libro();
+        $form = $this->createForm(LibroType::class, $libro);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $portadaFile = $form->get('imagen')->getData();
+
+            if ($portadaFile) {
+                $newFilename = uniqid().'.'.$portadaFile->guessExtension();
+
+                $portadaFile->move(
+                    $this->getParameter('portadas_directory'),
+                    $newFilename
+                );
+
+                $libro->setImagen($newFilename);
+            }
+
+            $em->persist($libro);
+            $em->flush();
+
+            $this->addFlash('success', 'Libro agregado correctamente.');
+            return $this->redirectToRoute('admin_dashboard');
+        }
+
+        return $this->render('admin/libros/nuevo.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
 }

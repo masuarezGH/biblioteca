@@ -19,7 +19,7 @@ class AdminReservaController extends AbstractController
     #[Route('/', name: 'admin_reservas')]
     public function index(EntityManagerInterface $em): Response
     {
-        // Ahora el index muestra SOLO las pendientes
+        //  el index muestra SOLO las pendientes
         $reservas = $em->getRepository(Reserva::class)->findBy([
             'estado' => EstadoReserva::PENDIENTE
         ]);
@@ -63,16 +63,13 @@ class AdminReservaController extends AbstractController
     #[Route('/activas', name: 'admin_reservas_activas')]
     public function activas(EntityManagerInterface $em): Response
     {
-        $hoy = new \DateTime();
-        $qb = $em->getRepository(Reserva::class)->createQueryBuilder('r')
-            ->where('r.estado = :estado')
-            ->andWhere('r.fechaFin >= :hoy')
-            ->setParameter('estado', EstadoReserva::ACTIVA->value)
-            ->setParameter('hoy', $hoy);
+        $reservas = $em->getRepository(Reserva::class)->findBy([
+            'estado' => EstadoReserva::ACTIVA
+        ]);
 
-        $reservas = $qb->getQuery()->getResult();
-
-        return $this->render('admin/reservas/activas.html.twig', ['reservas' => $reservas]);
+        return $this->render('admin/reservas/activas.html.twig', [
+            'reservas' => $reservas
+        ]);
     }
 
     #[Route('/sin-devolver', name: 'admin_libros_sin_devolver')]
@@ -82,7 +79,7 @@ class AdminReservaController extends AbstractController
         $qb = $em->getRepository(Reserva::class)->createQueryBuilder('r')
             ->where('r.estado = :estado')
             ->andWhere('r.fechaFin < :hoy')
-            ->setParameter('estado', EstadoReserva::ACTIVA->value)
+            ->setParameter('estado', EstadoReserva::ACTIVA)
             ->setParameter('hoy', $hoy);
 
         $reservas = $qb->getQuery()->getResult();
@@ -97,7 +94,7 @@ class AdminReservaController extends AbstractController
         $qb = $em->getRepository(Reserva::class)->createQueryBuilder('r')
             ->where('r.estado = :estado')
             ->andWhere('r.fechaFin < :hoy')
-            ->setParameter('estado', EstadoReserva::ACTIVA->value)
+            ->setParameter('estado', EstadoReserva::ACTIVA)
             ->setParameter('hoy', $hoy);
 
         $reservasVencidas = $qb->getQuery()->getResult();

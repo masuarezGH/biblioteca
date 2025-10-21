@@ -45,7 +45,7 @@ class RegistroType extends AbstractType
             ->add('password', PasswordType::class, [
                 'label' => 'Contraseña',
                 'mapped' => true,
-                'required' => true, // 👈 obligatorio en registro
+                'required' => true, //  obligatorio en registro
                 'attr' => ['class' => 'form-control'],
                 'constraints' => [
                     new Assert\NotBlank(['message' => 'La contraseña es obligatoria']),

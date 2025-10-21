@@ -44,7 +44,7 @@ class UsuarioType extends AbstractType
             ])
                 ->add('password', PasswordType::class, [
                 'label' => 'Nueva contraseña (opcional)',
-                'mapped' => false,   // 👈 clave: no pisa la entidad
+                'mapped' => false,   // <- clave: no pisa la entidad
                 'required' => false,
                 'attr' => ['class' => 'form-control'],
                 'constraints' => [

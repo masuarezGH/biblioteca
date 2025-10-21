@@ -27,9 +27,7 @@ class AdminController extends AbstractController
         $hoy = new \DateTime();
         $reservasActivas = $em->getRepository(Reserva::class)->createQueryBuilder('r')
             ->where('r.estado = :estado')
-            ->andWhere('r.fechaFin >= :hoy')
-            ->setParameter('estado', EstadoReserva::ACTIVA->value)
-            ->setParameter('hoy', $hoy)
+            ->setParameter('estado', EstadoReserva::ACTIVA)
             ->getQuery()
             ->getResult();
 
@@ -45,7 +43,7 @@ class AdminController extends AbstractController
         $librosSinDevolver = $em->getRepository(Reserva::class)->createQueryBuilder('r')
             ->where('r.estado = :estado')
             ->andWhere('r.fechaFin < :hoy')
-            ->setParameter('estado', EstadoReserva::ACTIVA->value)
+            ->setParameter('estado', EstadoReserva::ACTIVA)
             ->setParameter('hoy', $hoy)
             ->getQuery()
             ->getResult();
@@ -53,7 +51,7 @@ class AdminController extends AbstractController
         // Clientes deudores (usuarios con reservas sin devolver)
         $clientesDeudores = $librosSinDevolver;
 
-        // 🔹 Paginación de últimas reservas
+        // Paginación de últimas reservas
         $limit = 5;
         $offset = ($page - 1) * $limit;
 
@@ -77,7 +75,6 @@ class AdminController extends AbstractController
             'clientes_deudores' => $clientesDeudores,
             'ultimas_reservas' => $ultimasReservas,
             'libros_publicados' => $librosPublicados,
-            
             'currentPage' => $page,
             'totalPages' => $totalPages,
         ]);

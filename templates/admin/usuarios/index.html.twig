@@ -27,7 +27,11 @@
         {% for usuario in usuarios %}
             <tr>
                 <td>{{ usuario.id }}</td>
-                <td>{{ usuario.nombre }} {{ usuario.apellido }}</td>
+                <td>
+                    <a href="{{ path('usuario_perfil', {id: usuario.id}) }}" class="fw-bold text-decoration-none">
+                        {{ usuario.nombre }} {{ usuario.apellido }}
+                    </a>
+                </td>
                 <td>{{ usuario.email }}</td>
                 <td>
                     {% if usuario.estado %}

@@ -21,24 +21,46 @@ class RegistroType extends AbstractType
                 'attr' => ['class' => 'form-control'],
                 'constraints' => [
                     new Assert\NotBlank(['message' => 'El nombre de usuario es obligatorio']),
-                    new Assert\Length(['min' => 4]),
+                    new Assert\Length([
+                        'min' => 4,
+                        'minMessage' => 'Debe tener al menos {{ limit }} caracteres',
+                        'max' => 15,
+                        'maxMessage' => 'No puede tener más de {{ limit }} caracteres',
+                        ]),
                 ],
             ])
             ->add('nombre', TextType::class, [
                 'label' => 'Nombre',
                 'attr' => ['class' => 'form-control'],
-                'constraints' => [new Assert\NotBlank()],
+                'constraints' => [
+                    new Assert\NotBlank(['message' => 'El nombre es obligatorio']),
+                    new Assert\Length([
+                        'min' => 4,
+                        'minMessage' => 'Debe tener al menos {{ limit }} caracteres',
+                        'max' => 15,
+                        'maxMessage' => 'No puede tener más de {{ limit }} caracteres',
+                        ]),
+            
+            ],
             ])
             ->add('apellido', TextType::class, [
                 'label' => 'Apellido',
                 'attr' => ['class' => 'form-control'],
-                'constraints' => [new Assert\NotBlank()],
+                'constraints' => [
+                    new Assert\NotBlank(['message' => 'El apellido es obligatorio']),
+                    new Assert\Length([
+                        'min' => 4,
+                        'minMessage' => 'Debe tener al menos {{ limit }} caracteres',
+                        'max' => 15,
+                        'maxMessage' => 'No puede tener más de {{ limit }} caracteres',
+                        ]),
+                ],
             ])
             ->add('email', EmailType::class, [
                 'label' => 'Correo electrónico',
                 'attr' => ['class' => 'form-control'],
                 'constraints' => [
-                    new Assert\NotBlank(),
+                    new Assert\NotBlank(['message' => 'El correo electrónico es obligatorio']),
                     new Assert\Email(),
                 ],
             ])

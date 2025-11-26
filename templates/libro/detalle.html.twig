@@ -33,8 +33,7 @@
                     <a href="{{ path('reserva_libro', {id: libro.id}) }}" class="btn btn-primary"> Reservar libro</a>
                 {% else %}
                     <p>
-                         <a href="{{ path('app_login') }}">Inicia sesión</a> o 
-                        <a href="{{ path('usuario_registro') }}">regístrate</a> para reservar este libro.
+                         <a href="{{ path('app_login') }}">Iniciar sesión</a> para reservar este libro.
                     </p>
                 {% endif %}
                 {% else %}

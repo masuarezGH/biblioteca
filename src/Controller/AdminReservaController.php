@@ -115,4 +115,22 @@ class AdminReservaController extends AbstractController
         $this->addFlash('info', 'Reserva finalizada.');
         return $this->redirectToRoute('admin_reservas_activas');
     }
+
+    #[Route('/reserva/devolver/{id}', name: 'reserva_devolver')]
+    public function devolver(Reserva $reserva, EntityManagerInterface $em)
+    {
+        // Cambiar estado de la reserva
+        $reserva->setEstado(EstadoReserva::FINALIZADA);
+        $reserva->setFechaFin(new \DateTime());
+
+        // Cambiar estado del libro
+        $libro = $reserva->getLibro();
+        $libro->setEstado(EstadoLibro::DISPONIBLE);
+
+        $em->flush();
+
+        $this->addFlash('success', 'El libro fue devuelto y está disponible nuevamente.');
+        return $this->redirectToRoute('libro_catalogo'); // redirige al catálogo
+    }
+
 }

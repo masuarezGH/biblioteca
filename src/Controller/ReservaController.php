@@ -50,21 +50,4 @@ class ReservaController extends AbstractController
         return $this->redirectToRoute('libro_detalle', ['id' => $libro->getId()]);
     }
 
-    #[Route('/reserva/devolver/{id}', name: 'reserva_devolver')]
-    #[IsGranted("ROLE_ADMIN")]
-    public function devolver(Reserva $reserva, EntityManagerInterface $em)
-    {
-        // Cambiar estado de la reserva
-        $reserva->setEstado(EstadoReserva::FINALIZADA);
-        $reserva->setFechaFin(new \DateTime());
-
-        // Cambiar estado del libro
-        $libro = $reserva->getLibro();
-        $libro->setEstado(EstadoLibro::DISPONIBLE);
-
-        $em->flush();
-
-        $this->addFlash('success', 'El libro fue devuelto y está disponible nuevamente.');
-        return $this->redirectToRoute('libro_catalogo'); // redirige al catálogo
-    }
 }

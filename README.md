@@ -140,9 +140,9 @@ Después de cargar las fixtures, puedes iniciar sesión con:
 
 | Email | Contraseña | Rol |
 |---|---|---|
-| `admin@example.com` | `1234` | Administrador |
-| `juan@example.com` | `1234` | Usuario |
-| `ana@example.com` | `1234` | Usuario |
+| `admin@example.com` | `admin1234` | Administrador |
+| `juan@example.com` | `password1234` | Usuario |
+| `ana@example.com` | `password1234` | Usuario |
 
 > Las contraseñas pueden variar según lo definido en `src/DataFixtures/UsuarioFixture.php`.
 
